@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { Database, object, ref } from '@angular/fire/database';
+import { AlertController, ToastController } from '@ionic/angular';
+import { Route, Router } from '@angular/router';
+import { Storage } from '@ionic/storage';
 
 
 @Component({
@@ -9,50 +12,63 @@ import { Database, object, ref } from '@angular/fire/database';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  valor: any;
-  constructor(private database:Database) {}
- async notify(title:any,message:any){
-  await LocalNotifications.schedule({
-    notifications: [
-      {
-        title: title,
-        body: message,
-        id: 1,
-        schedule:{
-          allowWhileIdle:true
-        }
-      }
-    ]
-  });
- }
- frase:string="";
- color:any;
-  async ngOnInit() {
-    await LocalNotifications.requestPermissions();//solicitar permisos de la app
+  cargando: boolean=false;
+  user: any;
+  contra:any;
+  constructor(private storage:Storage,private database:Database, private toast:ToastController, private route:Router, private alertController:AlertController) {}
+  async presentToast(position: 'top' | 'middle' | 'bottom', content:any, color:any,icon:any) {
+    const toast = await this.toast.create({
+      message: content,
+      duration: 5000,
+      position: position,
+      color: color,
+      icon:icon ,
+    });
+
+    await toast.present();
+  }
+  async inses(){
+    this.cargando=true;
+    if(this.contra == null || this.user==null){
+      this.presentToast('top',"Llena todos los campos","secondary","sad-outline");
+      this.cargando=false;
+    }else{
+    const route = ref(this.database, 'users/'+this.user);
     
-    const route = ref(this.database, "Luz/ldr");
-    object(route).subscribe(attributes => {
-      const valores_db = attributes.snapshot.val();
-      this.valor = valores_db;
-      
-      if(this.valor>80){
-        this.notify("¡Es un día soleado y hermoso 😎!","Las aves cantan, las flores florecen. En días así, niños como tu deberían jugar o tomar un helado");
-        this.frase = "¡Es un día soleado 😎!";
-        this.color = "light";
-      }
-      if(this.valor>20 && this.valor<90){
-        this.frase = "¡Es un día normal 🤷‍♂️! como cualquier otro";
-        this.color = "medium";
-      }
-      if(this.valor<20){
-        this.notify("¡Está oscuro afuera 🥱!","Te recomiendo leer un libro o echarte una siesta");
-        this.frase = "¡Está oscuro afuera 🥱!";
-        this.color = "dark";
+    object(route).subscribe(async attributes1 => {
+      const valores_db = attributes1.snapshot.val();
+      if(await valores_db == null){
+        this.presentToast('top',"Usuario no existente. Registrate en el stand de CARLA","tertiary","warning-outline");
+        this.cargando=false;
+      }else{
+        const route1 = ref(this.database,'users/'+this.user+'/pass');
+        object(route1).subscribe(async attributes2 => {
+          const contras = attributes2.snapshot.val();
+          if(await contras == this.contra){
+            const route1 = ref(this.database,'users/'+this.user+'/state');
+             object(route1).subscribe(async attributes3 => {
+               if(await attributes3.snapshot.val()==true){
+                this.route.navigate(['preguntas']);
+                this.storage.set('User',this.user);
+                this.cargando=false;
+              }else{
+                this.presentToast('top',"Ya haz hecho el test. Si deseas resolverlo de nuevo, deberás conseguir un nuevo código","warning","information-circle-outline");
+                this.cargando=false;
+              }
+             });
+          }else{
+            this.presentToast('top',"Contraseña incorrecta","danger","close-circle-outline");
+            this.cargando=false;
+          }
+        });
       }
     });
   }
-  getBackgroundColor(): string {
-    const scale = this.valor / 100;
-    return `rgba(255, 255, 0, ${scale})`;
   }
+ 
+  async ngOnInit() {
+    this.storage.create();
+    
+  }
+  
 }

@@ -1,25 +1,33 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Luz del día
+      Test de CARLA
     </ion-title>
+    <ion-progress-bar type="indeterminate" *ngIf="cargando"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Luz del día</ion-title>
+      <ion-title size="large">Test de CARLA</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-card [color]="color">
+  <ion-card>
     <ion-card-header>
-      <ion-card-subtitle>Hoy, {{frase}}</ion-card-subtitle>
-      <ion-card-title>LUZ DEL DÍA DE HOY</ion-card-title>
+      <ion-card-subtitle>Tu nombre y clave serán entregados en el stand por $0,50. Participa por un llavero, un dulce, un pin y un peluche GRATIS. Los resultados serán anunciados en nuestro <a href="https://www.youtube.com/@carla-asistente">canal de Youtube.</a> </ion-card-subtitle>
+      <br>
+      <ion-card-title>Inicia sesión</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-icon name="bulb" [style.color]="getBackgroundColor()" style="font-size: 200px;"></ion-icon>
+      <ion-input label="nombre + apellido en minúsculas" label-placement="floating" fill="outline" placeholder="Ejm. juanvaldivieso" [(ngModel)]="user"></ion-input>
+      <br>
+      <ion-input label="Contraseña entregada" label-placement="floating" fill="outline" placeholder="Contraseña" [(ngModel)]="contra"></ion-input>
+      <br>
+      <ion-button (click)="inses()">
+        <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+      </ion-button>
     </ion-card-content>
   </ion-card>
 </ion-content>

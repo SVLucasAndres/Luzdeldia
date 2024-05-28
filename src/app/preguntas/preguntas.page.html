@@ -1,0 +1,182 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{ minutes | number: '2.0' }}:{{ seconds | number: '2.0' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{ minutes | number: '2.0' }}:{{ seconds | number: '2.0' }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-card *ngIf="ok">
+    <ion-card-header>
+      <ion-card-subtitle>Pregunta 1</ion-card-subtitle>
+      <ion-card-title>¿Qué significa C.A.R.L.A.?</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-radio-group [allowEmptySelection]="true" [(ngModel)]="p1">
+        <ion-radio value="1">Cubo de Asistencia<br/> de Respuestas Lógicas Asistidas</ion-radio><br/><br/>
+        <ion-radio value="2">Cubo de Aprendizaje<br/> de Resultados Lógicos Asistidos</ion-radio><br/><br/>
+        <ion-radio value="3">Cubo de Aprendizaje<br/> y Respuestas Lógicas Asistidas</ion-radio><br/><br/>
+        <ion-radio value="4">Cubo de Asitencia<br/> y Respuestas Lógicas Abreviadas</ion-radio><br/><br/>
+      </ion-radio-group>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="ok">
+    <ion-card-header>
+      <ion-card-subtitle>Pregunta 2</ion-card-subtitle>
+      <ion-card-title>¿A qué comandos responde CARLA?</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-radio-group *ngFor="let option of optionsp2" [allowEmptySelection]="true" [(ngModel)]="p2">
+        <ion-radio  [value]="option.value">
+          {{ option.label }}
+        </ion-radio><br/><br/>
+      </ion-radio-group>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="ok">
+    <ion-card-header>
+      <ion-card-subtitle>Pregunta 3</ion-card-subtitle>
+      <ion-card-title>Reordena el proceso de configuración de CARLA</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($any($event))">
+          <ion-item *ngFor="let item of items">
+            <ion-label>
+              {{item}}
+            </ion-label>
+            <ion-reorder slot="end"></ion-reorder>
+          </ion-item>
+        </ion-reorder-group>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="ok">
+    <ion-card-header>
+      <ion-card-subtitle>Pregunta 4</ion-card-subtitle>
+      <ion-card-title>CARLA puede...</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-checkbox [checked]="p4Res[0]" (ionChange)="toggleCheckbox(0)">Recordarte tareas</ion-checkbox>
+      <br /><br />
+      <ion-checkbox [checked]="p4Res[1]" (ionChange)="toggleCheckbox(1)">Guardar tareas a recordar</ion-checkbox>
+      <br /><br />
+      <ion-checkbox [checked]="p4Res[2]" (ionChange)="toggleCheckbox(2)">Poner temporizador</ion-checkbox>
+      <br /><br />
+      <ion-checkbox [checked]="p4Res[3]" (ionChange)="toggleCheckbox(3)">Mostrarte un color</ion-checkbox>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="ok">
+    <ion-card-header>
+      <ion-card-subtitle>Pregunta 5</ion-card-subtitle>
+      <ion-card-title>¿Qué plataforma se usó para realizar la app?</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-radio-group *ngFor="let option of optionsp5" [allowEmptySelection]="true" [(ngModel)]="p5">
+        <ion-radio  [value]="option.value">
+          {{ option.label }}
+        </ion-radio><br/><br/>
+      </ion-radio-group>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="ok">
+    <ion-card-header>
+      <ion-card-subtitle>Pregunta 6</ion-card-subtitle>
+      <ion-card-title>Cuando CARLA está amarilla, está esperando a que...</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-radio-group *ngFor="let option of optionsp6" [allowEmptySelection]="true" [(ngModel)]="p6">
+        <ion-radio  [value]="option.value">
+          {{ option.label }}
+        </ion-radio><br/><br/>
+      </ion-radio-group>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="ok">
+    <ion-card-header>
+      <ion-card-subtitle>Pregunta 7</ion-card-subtitle>
+      <ion-card-title>Cuando CARLA está verde, está esperando a que...</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-radio-group *ngFor="let option of optionsp6" [allowEmptySelection]="true" [(ngModel)]="p7">
+        <ion-radio  [value]="option.value">
+          {{ option.label }}
+        </ion-radio><br/><br/>
+      </ion-radio-group>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="ok">
+    <ion-card-header>
+      <ion-card-subtitle>Pregunta 8</ion-card-subtitle>
+      <ion-card-title>¿Para que sirve el código de CARLA?</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-radio-group *ngFor="let option of optionsp8" [allowEmptySelection]="true" [(ngModel)]="p8">
+        <ion-radio  [value]="option.value">
+          {{ option.label }}
+        </ion-radio><br/><br/>
+      </ion-radio-group>
+    </ion-card-content>
+  </ion-card>
+  
+  
+  <ion-card *ngIf="ok">
+    <ion-card-header>
+      <ion-card-subtitle>Pregunta 9</ion-card-subtitle>
+      <ion-card-title>¿Cuáles de estos no son tareas que CARLA tiene?</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-radio-group *ngFor="let option of optionsp12" [allowEmptySelection]="true" [(ngModel)]="p12">
+        <ion-radio  [value]="option.value">
+          {{ option.label }}
+        </ion-radio><br/><br/>
+      </ion-radio-group>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="ok">
+    <ion-card-header>
+      <ion-card-subtitle>Pregunta 10</ion-card-subtitle>
+      <ion-card-title>El síndrome de Down es una condición genética en la que un individuo tiene una copia extra del cromosoma...</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-radio-group *ngFor="let option of optionsp13" [allowEmptySelection]="true" [(ngModel)]="p13">
+        <ion-radio  [value]="option.value">
+          {{ option.label }}
+        </ion-radio><br/><br/>
+      </ion-radio-group>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="ok">
+    <ion-card-header>
+      <ion-card-subtitle>Pregunta 11</ion-card-subtitle>
+      <ion-card-title>¿En qué centro se hicieron pruebas con CARLA?</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-radio-group *ngFor="let option of optionsp14" [allowEmptySelection]="true" [(ngModel)]="p14">
+        <ion-radio  [value]="option.value">
+          {{ option.label }}
+        </ion-radio><br/><br/>
+      </ion-radio-group>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="ok">
+    <ion-card-header>
+      <ion-card-subtitle>Pregunta 12 (!PUNTOS DOBLES¡)</ion-card-subtitle>
+      <ion-card-title>¿Qué voltaje necesita CARLA para funcionar?</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-radio-group *ngFor="let option of optionsp15" [allowEmptySelection]="true" [(ngModel)]="p15">
+        <ion-radio  [value]="option.value">
+          {{ option.label }}
+        </ion-radio><br/><br/>
+      </ion-radio-group>
+    </ion-card-content>
+  </ion-card>
+  <ion-button (click)="submit()" expand="block" color="success" shape="round">
+    Hecho
+  </ion-button>
+</ion-content>
