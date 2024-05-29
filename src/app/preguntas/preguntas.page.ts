@@ -280,9 +280,10 @@ export class PreguntasPage implements OnInit {
       this.correctas=+'0';
     }
     
-    const route = ref(this.database,'users/'+ String(await this.storage.get('User')) +'/results');
-    await set(route,{points:this.puntaje, time:this.minutes+':'+this.seconds});
-    await set(ref(this.database,'users/'+String(await this.storage.get('User'))+'/state'),false);
+    const route = ref(this.database,'users/'+ String(await this.storage.get('User'))+'/points');
+    await set(route,this.puntaje);
+    const route1 = ref(this.database,'users/'+ String(await this.storage.get('User'))+'/time');
+    await set(route1,this.minutes + ':' + this.seconds);
     this.presentToast('top',"Prueba realizada \n Puntaje: "+this.puntaje+ "\n Tiempo: "+this.minutes+" minutos y "+this.seconds+' segundos',"success","checkmark-circle-outline");
     this.route.navigate(['home']);
   }

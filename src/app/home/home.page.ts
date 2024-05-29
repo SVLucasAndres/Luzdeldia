@@ -4,6 +4,7 @@ import { Database, object, ref } from '@angular/fire/database';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Route, Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
+import { set } from 'firebase/database';
 
 
 @Component({
@@ -29,41 +30,21 @@ export class HomePage implements OnInit {
   }
   async inses(){
     this.cargando=true;
-    if(this.contra == null || this.user==null){
-      this.presentToast('top',"Llena todos los campos","secondary","sad-outline");
-      this.cargando=false;
-    }else{
-    const route = ref(this.database, 'users/'+this.user);
-    
-    object(route).subscribe(async attributes1 => {
-      const valores_db = attributes1.snapshot.val();
-      if(await valores_db == null){
-        this.presentToast('top',"Usuario no existente. Registrate en el stand de CARLA","tertiary","warning-outline");
+    const route = ref(this.database, 'users/'+this.user+'/state');
+    object(route).subscribe(async attributes=> {
+      const val = attributes.snapshot.val();
+      if(val==false){
+        this.presentToast('top',"Error: Prueba ya hecha","secondary","sad-outline");
         this.cargando=false;
-      }else{
-        const route1 = ref(this.database,'users/'+this.user+'/pass');
-        object(route1).subscribe(async attributes2 => {
-          const contras = attributes2.snapshot.val();
-          if(await contras == this.contra){
-            const route1 = ref(this.database,'users/'+this.user+'/state');
-             object(route1).subscribe(async attributes3 => {
-               if(await attributes3.snapshot.val()==true){
-                this.route.navigate(['preguntas']);
-                this.storage.set('User',this.user);
-                this.cargando=false;
-              }else{
-                this.presentToast('top',"Ya haz hecho el test. Si deseas resolverlo de nuevo, deberás conseguir un nuevo código","warning","information-circle-outline");
-                this.cargando=false;
-              }
-             });
-          }else{
-            this.presentToast('top',"Contraseña incorrecta","danger","close-circle-outline");
-            this.cargando=false;
-          }
-        });
+      }else {
+        const route = ref(this.database, 'users/'+this.user);
+        await set(route,{state:false});
+        await this.storage.set('User',this.user);
+        this.route.navigate(['preguntas']);
+        this.cargando=false;
       }
-    });
-  }
+    })
+    
   }
  
   async ngOnInit() {

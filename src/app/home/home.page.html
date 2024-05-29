@@ -16,14 +16,11 @@
 
   <ion-card>
     <ion-card-header>
-      <ion-card-subtitle>Tu nombre y clave serán entregados en el stand. Compite con tus amigos para ganar un chocolate :) </ion-card-subtitle>
-      <br>
       <ion-card-title>Inicia sesión</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-input label="nombre + apellido en minúsculas" label-placement="floating" fill="outline" placeholder="Ejm. juanvaldivieso" [(ngModel)]="user"></ion-input>
-      <br>
-      <ion-input label="Contraseña entregada" label-placement="floating" fill="outline" placeholder="Contraseña" [(ngModel)]="contra"></ion-input>
+      
+        <ion-input label="Nombre y apellido en minúsculas" label-placement="floating" fill="outline" placeholder="Ejm. Juan Valdivieso" [(ngModel)]="user"></ion-input>
       <br>
       <ion-button (click)="inses()">
         <ion-icon slot="icon-only" name="checkmark"></ion-icon>
